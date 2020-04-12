@@ -16,14 +16,14 @@ typedef struct
 } job_t;
 
 // initialization functions for each job
-job_t* initialize_job_lancer();
-job_t* initialize_job_zealot();
-job_t* initialize_job_jester();
+job_t* initializeJobLancer();
+job_t* initializeJobZealot();
+job_t* initializeJobJester();
 
 // prints moveset for job, returns SUCCESS on success, ERROR on error
-int print_job_moveset(job_t* job, int position);
+int printJobMoveset(job_t* job, int position);
 
 // bookkeeping function
-void free_job(job_t* job);
+void freeJob(job_t* job);
 
 #endif

@@ -8,6 +8,6 @@
 #include <string.h>
 #include <time.h>
 
-
+int runGame(); // runs the game
 
 #endif

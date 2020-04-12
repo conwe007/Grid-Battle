@@ -1,7 +1,7 @@
 #include "job.h"
 
 // initializes lancer job
-job_t* initialize_job_lancer()
+job_t* initializeJobLancer()
 {
 	job_t* lancer = (job_t*)malloc(sizeof(job_t));
 
@@ -13,18 +13,18 @@ job_t* initialize_job_lancer()
 	lancer->evasion = 5.0;
 	lancer->speed = 5;
 
-	lancer->action[0] = initialize_action_stab();
-	lancer->action[1] = initialize_action_sweep();
-	lancer->action[2] = initialize_action_advance();
-	lancer->action[3] = initialize_action_retreat();
-	lancer->action[4] = initialize_action_move();
-	lancer->action[5] = initialize_action_pass();
+	lancer->action[0] = initializeActionStab();
+	lancer->action[1] = initializeActionSweep();
+	lancer->action[2] = initializeActionAdvance();
+	lancer->action[3] = initializeActionRetreat();
+	lancer->action[4] = initializeActionMove();
+	lancer->action[5] = initializeActionPass();
 
 	return lancer;
 }
 
 // initializes zealot job
-job_t* initialize_job_zealot()
+job_t* initializeJobZealot()
 {
 	job_t* zealot = (job_t*)malloc(sizeof(job_t));
 
@@ -36,18 +36,18 @@ job_t* initialize_job_zealot()
 	zealot->evasion = 5.0;
 	zealot->speed = 7;
 
-	zealot->action[0] = initialize_action_pray();
-	zealot->action[1] = initialize_action_condemn();
-	zealot->action[2] = initialize_action_smite();
-	zealot->action[3] = initialize_action_bless();
-	zealot->action[4] = initialize_action_move();
-	zealot->action[5] = initialize_action_pass();
+	zealot->action[0] = initializeActionPray();
+	zealot->action[1] = initializeActionCondemn();
+	zealot->action[2] = initializeActionSmite();
+	zealot->action[3] = initializeActionBless();
+	zealot->action[4] = initializeActionMove();
+	zealot->action[5] = initializeActionPass();
 
 	return zealot;
 }
 
 // initializes jester job
-job_t* initialize_job_jester()
+job_t* initializeJobJester()
 {
 	job_t* jester = (job_t*)malloc(sizeof(job_t));
 
@@ -59,18 +59,18 @@ job_t* initialize_job_jester()
 	jester->evasion = 8.0;
 	jester->speed = 9;
 
-	jester->action[0] = initialize_action_mock();
-	jester->action[1] = initialize_action_foolery();
-	jester->action[2] = initialize_action_somersault();
-	jester->action[3] = initialize_action_puppetshow();
-	jester->action[4] = initialize_action_move();
-	jester->action[5] = initialize_action_pass();
+	jester->action[0] = initializeActionMock();
+	jester->action[1] = initializeActionFoolery();
+	jester->action[2] = initializeActionSomersault();
+	jester->action[3] = initializeActionPuppetshow();
+	jester->action[4] = initializeActionMove();
+	jester->action[5] = initializeActionPass();
 
 	return jester;
 }
 
 // prints available moveset for job, returns SUCCESS on success, ERROR on error
-int print_job_moveset(job_t* job, int position)
+int printJobMoveset(job_t* job, int position)
 {
 	if(job == NULL)
 	{
@@ -80,9 +80,9 @@ int print_job_moveset(job_t* job, int position)
 
 	for(int i = 0; i < NUM_ACTIONS; i++)
 	{
-		if((job->action[i] != NULL) && (current_position_is_valid(job->action[i], position) == TRUE))
+		if((job->action[i] != NULL) && (currentPositionIsValid(job->action[i], position) == TRUE))
 		{
-			print_action_info(job->action[i], i, position);
+			printActionInfo(job->action[i], i, position);
 		}
 	}
 
@@ -90,7 +90,7 @@ int print_job_moveset(job_t* job, int position)
 }
 
 // bookkeeping function
-void free_job(job_t* job)
+void freeJob(job_t* job)
 {
 	if(job == NULL)
 	{
@@ -104,7 +104,7 @@ void free_job(job_t* job)
 	{
 		if(job->action[i] != NULL)
 		{
-			free_action(job->action[i]);
+			freeAction(job->action[i]);
 		}
 	}
 	

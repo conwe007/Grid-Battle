@@ -1,33 +1,34 @@
 #include "game.h"
 
-int main(int argc, char* argv[])
+// runs the game
+int runGame()
 {
 	srand(time(NULL));
 
-	grid_t* grid = initialize_grid();
-	print_grid(grid);
+	grid_t* grid = initializeGrid();
+	printGrid(grid);
 	printf("\n");
 
 	// main game loop
-	while(determine_winner(grid) == NO_WINNER)
+	while(determineWinner(grid) == NO_WINNER)
 	{
-		int* character_turn_order = get_character_turn_order(grid);
+		int* character_turn_order = getCharacterTurnOrder(grid);
 
 		for(int i = 0; i < NUM_POSITIONS; i++)
 		{
 			// left team (human player)
-			if(get_team(character_turn_order[i]) == LEFT_TEAM)
+			if(getTeam(character_turn_order[i]) == LEFT_TEAM)
 			{
-				human_turn(grid, character_turn_order[i]);
+				humanTurn(grid, character_turn_order[i]);
 			}
 
 			// right team (AI)
 			else
 			{
-				ai_turn(grid, character_turn_order[i]);
+				aiTurn(grid, character_turn_order[i]);
 			}
 
-			print_grid(grid);
+			printGrid(grid);
 			printf("\n");
 		}
 
@@ -36,15 +37,15 @@ int main(int argc, char* argv[])
 
 
 	// end the game and print the winner
-	if(determine_winner(grid) == LEFT_TEAM)
+	if(determineWinner(grid) == LEFT_TEAM)
 	{
 		printf("Left team wins\n");
-	} else if(determine_winner(grid) == RIGHT_TEAM)
+	} else if(determineWinner(grid) == RIGHT_TEAM)
 	{
 		printf("Right team wins\n");
 	}
 
-	free_grid(grid);
+	freeGrid(grid);
 
 	return 0;
 }

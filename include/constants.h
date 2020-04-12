@@ -49,5 +49,6 @@
 #define FALSE 0
 
 #define BUFFER_SIZE 1024
+#define WINDOW_NAME_SIZE 1024
 
 #endif

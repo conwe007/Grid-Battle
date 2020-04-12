@@ -25,71 +25,71 @@ typedef struct
 } result_t;
 
 // general actions common to every job
-action_t* initialize_action_move();
-action_t* initialize_action_pass();
+action_t* initializeActionMove();
+action_t* initializeActionPass();
 
 // actions belonging to the lancer job
-action_t* initialize_action_stab();
-action_t* initialize_action_sweep();
-action_t* initialize_action_advance();
-action_t* initialize_action_retreat();
+action_t* initializeActionStab();
+action_t* initializeActionSweep();
+action_t* initializeActionAdvance();
+action_t* initializeActionRetreat();
 
 // actions belonging to the zealot job
-action_t* initialize_action_pray();
-action_t* initialize_action_condemn();
-action_t* initialize_action_smite();
-action_t* initialize_action_bless();
+action_t* initializeActionPray();
+action_t* initializeActionCondemn();
+action_t* initializeActionSmite();
+action_t* initializeActionBless();
 
 // actions belonging to the jester job
-action_t* initialize_action_mock();
-action_t* initialize_action_foolery();
-action_t* initialize_action_somersault();
-action_t* initialize_action_puppetshow();
+action_t* initializeActionMock();
+action_t* initializeActionFoolery();
+action_t* initializeActionSomersault();
+action_t* initializeActionPuppetshow();
 
 // calculates result struct for the specified action, returns result struct on success, NULL on failure
-result_t* calculate_action_result(action_t* action, double skill, int current_position, int move_position);
+result_t* calculateActionResult(action_t* action, double skill, int current_position, int move_position);
 
 // helper function, returns current position action index (different from current position) for specified action, INVALID if position is invalid
-int current_position_index(action_t* action, int current_position);
+int currentPositionIndex(action_t* action, int current_position);
 
 // helper function, returns TRUE if current position is valid for specified action, FALSE otherwise
-int current_position_is_valid(action_t* action, int current_position);
+int currentPositionIsValid(action_t* action, int current_position);
 
 // helper function, returns TRUE if move position is valid for current position and specified action, FALSE otherwise
-int move_position_is_valid(action_t* action, int current_position, int move_position);
+int movePositionIsValid(action_t* action, int current_position, int move_position);
 
 // determines whether action will be a success based on character skill, returns SUCCESS on success, FAILURE on failure, ERROR on error
-int action_success(double skill);
+int actionSuccess(double skill);
 
 // determines whether a character will evade an action based on evasion, returns SUCCESS on success, FAILURE on failure, ERROR on error
-int evade_success(double evasion);
+int evadeSuccess(double evasion);
 
 // returns an array of target positions an action will affect based on the initiator's position
-int* get_target_positions(action_t* action, int current_position);
+int* getTargetPositions(action_t* action, int current_position);
 
 // prints the array of target positions returned by get_target_positions(), returns SUCCESS on success, ERROR on error
-int print_target_positions(action_t* action, int current_position);
+int printTargetPositions(action_t* action, int current_position);
 
 // returns an array of move positions valid to an action based on the initiator's position
-int* get_move_positions(action_t* action, int current_position);
+int* getMovePositions(action_t* action, int current_position);
 
 // prints the array of move positions returned by get_move_positions(), returns SUCCESS on success, ERROR on error
-int print_move_positions(action_t* action, int current_position);
+int printMovePositions(action_t* action, int current_position);
 
 // returns TRUE if action index is valid, FALSE otherwise
-int action_index_is_valid(int action_index);
+int actionIndexIsValid(int action_index);
 
 // prints info about action, returns SUCCESS on success, ERROR on error
-int print_action_info(action_t* action, int action_index, int current_position);
+int printActionInfo(action_t* action, int action_index, int current_position);
 
 // initializes a result struct containing the initializes a result struct containing the result of any action
-result_t* initialize_result();
+result_t* initializeResult();
 
 // debugging function, returns SUCCESS on success, ERROR on error
-int print_result(result_t* result);
+int printResult(result_t* result);
 
 // bookkeeping functions
-void free_action(action_t* action);
-void free_result(result_t* result);
+void freeAction(action_t* action);
+void freeResult(result_t* result);
 
 #endif

@@ -1,7 +1,7 @@
 #include "action.h"
 
 // initializes move action, character swaps position with another character
-action_t* initialize_action_move()
+action_t* initializeActionMove()
 {
 	action_t* move = (action_t*)malloc(sizeof(action_t));
 
@@ -81,7 +81,7 @@ action_t* initialize_action_move()
 }
 
 // initializes pass action, character passes turn
-action_t* initialize_action_pass()
+action_t* initializeActionPass()
 {
 	action_t* pass = (action_t*)malloc(sizeof(action_t));
 
@@ -107,7 +107,7 @@ action_t* initialize_action_pass()
 }
 
 // from the front column, damages both enemy columns in the same row
-action_t* initialize_action_stab()
+action_t* initializeActionStab()
 {
 	action_t* stab = (action_t*)malloc(sizeof(action_t));
 
@@ -167,7 +167,7 @@ action_t* initialize_action_stab()
 }
 
 //from the front column, damages both enemy rows in the front column
-action_t* initialize_action_sweep()
+action_t* initializeActionSweep()
 {
 	action_t* sweep = (action_t*)malloc(sizeof(action_t));
 
@@ -227,7 +227,7 @@ action_t* initialize_action_sweep()
 }
 
 // from the back column, attack the enemy in the same row in front and move to the front column
-action_t* initialize_action_advance()
+action_t* initializeActionAdvance()
 {
 	action_t* advance = (action_t*)malloc(sizeof(action_t));
 
@@ -311,7 +311,7 @@ action_t* initialize_action_advance()
 }
 
 // from the front column, attack the enemy in the same row in front and move to the back column
-action_t* initialize_action_retreat()
+action_t* initializeActionRetreat()
 {
 	action_t* retreat = (action_t*)malloc(sizeof(action_t));
 
@@ -395,7 +395,7 @@ action_t* initialize_action_retreat()
 }
 
 // from the front column, heal the initiator of the action
-action_t* initialize_action_pray()
+action_t* initializeActionPray()
 {
 	action_t* pray = (action_t*)malloc(sizeof(action_t));
 
@@ -450,7 +450,7 @@ action_t* initialize_action_pray()
 }
 
 // from the back column, damage the two enemies in the back column
-action_t* initialize_action_condemn()
+action_t* initializeActionCondemn()
 {
 	action_t* condemn = (action_t*)malloc(sizeof(action_t));
 
@@ -510,7 +510,7 @@ action_t* initialize_action_condemn()
 }
 
 // from the front column, damage the enemy in the front column and opposite row
-action_t* initialize_action_smite()
+action_t* initializeActionSmite()
 {
 	action_t* smite = (action_t*)malloc(sizeof(action_t));
 
@@ -565,7 +565,7 @@ action_t* initialize_action_smite()
 }
 
 // from the back column, heal the two allies in the front column
-action_t* initialize_action_bless()
+action_t* initializeActionBless()
 {
 	action_t* bless = (action_t*)malloc(sizeof(action_t));
 
@@ -625,7 +625,7 @@ action_t* initialize_action_bless()
 }
 
 // from the front column, damage the enemy in the back column and opposite row
-action_t* initialize_action_mock()
+action_t* initializeActionMock()
 {
 	action_t* mock = (action_t*)malloc(sizeof(action_t));
 
@@ -680,7 +680,7 @@ action_t* initialize_action_mock()
 }
 
 // from the back column, damage the enemy in the back column and the enemy in the front column and opposite row, swap with ally in the front column and opposite row
-action_t* initialize_action_foolery()
+action_t* initializeActionFoolery()
 {
 	action_t* foolery = (action_t*)malloc(sizeof(action_t));
 
@@ -769,7 +769,7 @@ action_t* initialize_action_foolery()
 }
 
 // from the front column, damage the enemy in the front column and the same row, and move to the opposite row
-action_t* initialize_action_somersault()
+action_t* initializeActionSomersault()
 {
 	action_t* somersault = (action_t*)malloc(sizeof(action_t));
 
@@ -853,7 +853,7 @@ action_t* initialize_action_somersault()
 }
 
 // from the front column, heal the ally in the back column, the ally in the opposite row, and the enemy in the front column, swap with ally in the back column
-action_t* initialize_action_puppetshow()
+action_t* initializeActionPuppetshow()
 {
 	action_t* puppetshow = (action_t*)malloc(sizeof(action_t));
 
@@ -947,24 +947,24 @@ action_t* initialize_action_puppetshow()
 }
 
 // performs the specified action, returns result struct on success, NULL on failure
-result_t* calculate_action_result(action_t* action, double skill, int current_position, int move_position)
+result_t* calculateActionResult(action_t* action, double skill, int current_position, int move_position)
 {
 	// exit if current position is not valid
-	if(current_position_is_valid(action, current_position) == 0)
+	if(currentPositionIsValid(action, current_position) == 0)
 	{
 		fprintf(stderr, "error: current position '%i' is not valid\n", current_position);
 		return NULL;
 	}
 
 	// exit if move position is not valid
-	if(move_position_is_valid(action, current_position, move_position) == 0)
+	if(movePositionIsValid(action, current_position, move_position) == 0)
 	{
 		fprintf(stderr, "error: move position '%i' is not valid\n", move_position);
 		return NULL;
 	}
 
-	int index = current_position_index(action, current_position);
-	result_t* result = initialize_result();
+	int index = currentPositionIndex(action, current_position);
+	result_t* result = initializeResult();
 
 	// loop through each target position defined for the current position, apply power to result power grid
 	if(action->target_position != NULL)
@@ -973,7 +973,7 @@ result_t* calculate_action_result(action_t* action, double skill, int current_po
 		while(action->target_position[index][i] != TERMINATE)
 		{
 			// roll against skill stat to determine if action power is applied
-			if(action_success(skill))
+			if(actionSuccess(skill))
 			{
 				result->power_grid[action->target_position[index][i]] = action->power;
 			}
@@ -993,7 +993,7 @@ result_t* calculate_action_result(action_t* action, double skill, int current_po
 }
 
 // helper function, returns current position action index (different from current position) for specified action, INVALID if position is invalid
-int current_position_index(action_t* action, int current_position)
+int currentPositionIndex(action_t* action, int current_position)
 {
 	if(action == NULL)
 	{
@@ -1015,9 +1015,9 @@ int current_position_index(action_t* action, int current_position)
 }
 
 // helper function, returns TRUE if current position is valid for specified action, FALSE otherwise
-int current_position_is_valid(action_t* action, int current_position)
+int currentPositionIsValid(action_t* action, int current_position)
 {
-	if(current_position_index(action, current_position) == INVALID)
+	if(currentPositionIndex(action, current_position) == INVALID)
 	{
 		return FALSE;
 	}
@@ -1026,7 +1026,7 @@ int current_position_is_valid(action_t* action, int current_position)
 }
 
 // helper function, returns TRUE if move position is valid for current position and specified action, FALSE otherwise
-int move_position_is_valid(action_t* action, int current_position, int move_position)
+int movePositionIsValid(action_t* action, int current_position, int move_position)
 {
 	// exit SUCCESS if action does not support move and move position is NO_MOVE, FAILURE if move position is not NO_MOVE
 	if(action->move_position == NULL && move_position == NO_MOVE && action->must_move == FALSE)
@@ -1040,7 +1040,7 @@ int move_position_is_valid(action_t* action, int current_position, int move_posi
 		return FALSE;
 	}
 
-	int index = current_position_index(action, current_position);
+	int index = currentPositionIndex(action, current_position);
 
 	// loop until a valid matching move position from current position is found
 	int i = 0;
@@ -1058,7 +1058,7 @@ int move_position_is_valid(action_t* action, int current_position, int move_posi
 }
 
 // determines whether action will be a success based on character skill, returns SUCCESS on success, FAILURE on failure, ERROR on error
-int action_success(double skill)
+int actionSuccess(double skill)
 {
 	if(skill < 0 || skill > 10)
 	{
@@ -1076,7 +1076,7 @@ int action_success(double skill)
 }
 
 // determines whether a character will evade an action based on evasion, returns SUCCESS on success, FAILURE on failure, ERROR on error
-int evade_success(double evasion)
+int evadeSuccess(double evasion)
 {
 	if(evasion < 0 || evasion > 10)
 	{
@@ -1094,11 +1094,11 @@ int evade_success(double evasion)
 }
 
 // returns an array of target positions an action will affect based on the initiator's position
-int* get_target_positions(action_t* action, int current_position)
+int* getTargetPositions(action_t* action, int current_position)
 {
 	// maximum size needed is 8 target positions plus terminating -1
 	int* target_position_array = (int*)malloc(sizeof(int) * (NUM_TARGET_POSITIONS + 1));
-	int current_position_index_temp = current_position_index(action, current_position);
+	int current_position_index_temp = currentPositionIndex(action, current_position);
 	int index = 0;
 
 	// return empty array if the action does not have target position(s)
@@ -1128,7 +1128,7 @@ int* get_target_positions(action_t* action, int current_position)
 }
 
 // prints the array of target positions returned by get_target_positions(), returns SUCCESS on success, ERROR on error
-int print_target_positions(action_t* action, int current_position)
+int printTargetPositions(action_t* action, int current_position)
 {
 	if(action == NULL)
 	{
@@ -1136,7 +1136,7 @@ int print_target_positions(action_t* action, int current_position)
 		return ERROR;
 	}
 
-	int* target_position_array = get_target_positions(action, current_position);
+	int* target_position_array = getTargetPositions(action, current_position);
 	int index = 0;
 
 	printf("Target positions for action '%s' at position '%i': ", action->name, current_position);
@@ -1153,11 +1153,11 @@ int print_target_positions(action_t* action, int current_position)
 }
 
 // returns an array of move positions valid to an action based on the initiator's position
-int* get_move_positions(action_t* action, int current_position)
+int* getMovePositions(action_t* action, int current_position)
 {
 	// maximum size needed is 2 move positions plus terminating -1
 	int* move_position_array = (int*)malloc(sizeof(int) * (NUM_MOVE_CELLS + 1));
-	int current_position_index_temp = current_position_index(action, current_position);
+	int current_position_index_temp = currentPositionIndex(action, current_position);
 	int index = 0;
 
 	// return empty array if the action does not have move position(s)
@@ -1187,7 +1187,7 @@ int* get_move_positions(action_t* action, int current_position)
 }
 
 // prints the array of move positions returned by get_move_positions(), returns SUCCESS on success, ERROR on error
-int print_move_positions(action_t* action, int current_position)
+int printMovePositions(action_t* action, int current_position)
 {
 	if(action == NULL)
 	{
@@ -1195,7 +1195,7 @@ int print_move_positions(action_t* action, int current_position)
 		return ERROR;
 	}
 
-	int* move_position_array = get_move_positions(action, current_position);
+	int* move_position_array = getMovePositions(action, current_position);
 	int index = 0;
 
 	printf("Move positions for action '%s' at position '%i': ", action->name, current_position);
@@ -1212,7 +1212,7 @@ int print_move_positions(action_t* action, int current_position)
 }
 
 // returns TRUE if action index is valid, FALSE otherwise
-int action_index_is_valid(int action_index)
+int actionIndexIsValid(int action_index)
 {
 	if(action_index < 0 || action_index > (NUM_ACTIONS - 1))
 	{
@@ -1223,7 +1223,7 @@ int action_index_is_valid(int action_index)
 }
 
 // prints info about action, returns SUCCESS on success, ERROR on error
-int print_action_info(action_t* action, int action_index, int current_position)
+int printActionInfo(action_t* action, int action_index, int current_position)
 {
 	if(action == NULL)
 	{
@@ -1233,15 +1233,15 @@ int print_action_info(action_t* action, int action_index, int current_position)
 
 	printf("\t%s%i: %s\n", STRING_ACTION, action_index, action->name);
 	printf("\t\t");
-	print_target_positions(action, current_position);
+	printTargetPositions(action, current_position);
 	printf("\t\t");
-	print_move_positions(action, current_position);
+	printMovePositions(action, current_position);
 
 	return SUCCESS;
 }
 
 // initializes a result struct containing the result of any action
-result_t* initialize_result()
+result_t* initializeResult()
 {
 	result_t* result = (result_t*)malloc(sizeof(result_t));
 
@@ -1261,7 +1261,7 @@ result_t* initialize_result()
 }
 
 // debugging function, returns SUCCESS on success, ERROR on error
-int print_result(result_t* result)
+int printResult(result_t* result)
 {
 	if(result == NULL)
 	{
@@ -1280,7 +1280,7 @@ int print_result(result_t* result)
 }
 
 // bookkeeping function
-void free_action(action_t* action)
+void freeAction(action_t* action)
 {
 	if(action == NULL)
 	{
@@ -1324,7 +1324,7 @@ void free_action(action_t* action)
 }
 
 // bookkeeping function
-void free_result(result_t* result)
+void freeResult(result_t* result)
 {
 	free(result);
 }

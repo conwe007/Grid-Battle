@@ -15,5 +15,5 @@ to compile this program. This program compiles on Unix with gcc 7.4.0. Note that
 ### To Execture
 Run the program from the terminal with the following command:
 ```bash
-$ ./game
+$ ./main
 ```

@@ -1,7 +1,7 @@
 #include "grid.h"
 
 // initializes each cell of the grid with a random class
-grid_t* initialize_grid()
+grid_t* initializeGrid()
 {
 	grid_t* grid = (grid_t*)malloc(sizeof(grid_t));
 
@@ -15,13 +15,13 @@ grid_t* initialize_grid()
 
 		if(random <= 0.333)
 		{
-			grid->position[i] = initialize_character(name, i, "Lancer");
+			grid->position[i] = initializeCharacter(name, i, "Lancer");
 		} else if(random > 0.333 && random <= 0.666)
 		{
-			grid->position[i] = initialize_character(name, i, "Zealot");
+			grid->position[i] = initializeCharacter(name, i, "Zealot");
 		} else
 		{
-			grid->position[i] = initialize_character(name, i, "Jester");
+			grid->position[i] = initializeCharacter(name, i, "Jester");
 		}
 	}
 
@@ -29,7 +29,7 @@ grid_t* initialize_grid()
 }
 
 // provides i/o for human player to choose an action for character at position to perform, returns SUCCESS on success, FAILURE on invalid character, ERROR on error
-int human_turn(grid_t* grid, int position)
+int humanTurn(grid_t* grid, int position)
 {
 	if(grid == NULL)
 	{
@@ -37,7 +37,7 @@ int human_turn(grid_t* grid, int position)
 	}
 
 	// do not give character a turn if they are dead
-	if(is_alive(grid->position[position]) == FALSE)
+	if(isAlive(grid->position[position]) == FALSE)
 	{
 		return FAILURE;
 	}
@@ -45,11 +45,11 @@ int human_turn(grid_t* grid, int position)
 	int action_index = -1;
 	char action_index_input[BUFFER_SIZE];
 	memset(action_index_input, 0, sizeof(char) * BUFFER_SIZE);
-	int action_index_valid = action_index_is_valid(action_index);
-	int* available_action_array = get_available_actions(grid->position[position]);
+	int action_index_valid = actionIndexIsValid(action_index);
+	int* available_action_array = getAvailableActions(grid->position[position]);
 
 	printf("Current character info:\n");
-	print_character_info(grid->position[position], position);
+	printCharacterInfo(grid->position[position], position);
 
 	// loop until player selects valid action
 	while(action_index_valid == FALSE)
@@ -85,15 +85,15 @@ int human_turn(grid_t* grid, int position)
 	int move_position = NO_MOVE;
 	char move_position_input[BUFFER_SIZE];
 	memset(move_position_input, 0, sizeof(char) * BUFFER_SIZE);
-	int move_position_valid = move_position_is_valid(grid->position[position]->job->action[action_index], position, move_position);
-	int* move_position_array = get_move_positions(grid->position[position]->job->action[action_index], position);
+	int move_position_valid = movePositionIsValid(grid->position[position]->job->action[action_index], position, move_position);
+	int* move_position_array = getMovePositions(grid->position[position]->job->action[action_index], position);
 	
 	// if the action requires character to move, have player select move position
 	if(grid->position[position]->job->action[action_index]->must_move == TRUE)
 	{
 		move_position_valid = FALSE;
 		
-		print_move_positions(grid->position[position]->job->action[action_index], position);
+		printMovePositions(grid->position[position]->job->action[action_index], position);
 
 		while(move_position_valid == FALSE)
 		{
@@ -126,11 +126,11 @@ int human_turn(grid_t* grid, int position)
 	free(move_position_array);
 
 	// perform the action with player specified inputs
-	return perform_action(grid, position, action_index, move_position);;
+	return performAction(grid, position, action_index, move_position);;
 }
 
 // determines action that ai character at position will perform, returns SUCCESS on success, FAILURE on invalid character, ERROR on error
-int ai_turn(grid_t* grid, int position)
+int aiTurn(grid_t* grid, int position)
 {
 	if(grid == NULL)
 	{
@@ -138,13 +138,13 @@ int ai_turn(grid_t* grid, int position)
 	}
 
 	// do not give character a turn if they are dead
-	if(is_alive(grid->position[position]) == FALSE)
+	if(isAlive(grid->position[position]) == FALSE)
 	{
 		return FAILURE;
 	}
 
 	int action_index = -1;
-	int* available_action_array = get_available_actions(grid->position[position]);
+	int* available_action_array = getAvailableActions(grid->position[position]);
 
 	// count how many available actions there are
 	int available_action_count = 0;
@@ -158,7 +158,7 @@ int ai_turn(grid_t* grid, int position)
 	printf("'%s' uses action '%s'\n", grid->position[position]->name, grid->position[position]->job->action[action_index]->name);
 
 	int move_position = NO_MOVE;
-	int* move_position_array = get_move_positions(grid->position[position]->job->action[action_index], position);
+	int* move_position_array = getMovePositions(grid->position[position]->job->action[action_index], position);
 	
 	// if the action requires character to move, have player select move position
 	if(grid->position[position]->job->action[action_index]->must_move == TRUE)
@@ -180,11 +180,11 @@ int ai_turn(grid_t* grid, int position)
 	free(move_position_array);
 
 	// perform the action with player specified inputs
-	return perform_action(grid, position, action_index, move_position);;
+	return performAction(grid, position, action_index, move_position);;
 }
 
 // initiates action at action_index by character at position, with optional move_position (-1 if no move), returns SUCCESS on success, ERROR on error
-int perform_action(grid_t* grid, int position, int action_index, int move_position)
+int performAction(grid_t* grid, int position, int action_index, int move_position)
 {
 	if(position < 0 || position > 7)
 	{
@@ -198,7 +198,7 @@ int perform_action(grid_t* grid, int position, int action_index, int move_positi
 		return ERROR;
 	}
 
-	result_t* result = calculate_action_result(grid->position[position]->job->action[action_index], grid->position[position]->job->skill, position, move_position);
+	result_t* result = calculateActionResult(grid->position[position]->job->action[action_index], grid->position[position]->job->skill, position, move_position);
 	if(result == NULL)
 	{
 		fprintf(stderr, "error: null result\n");
@@ -209,10 +209,10 @@ int perform_action(grid_t* grid, int position, int action_index, int move_positi
 	for(int i = 0; i < NUM_POSITIONS; i++)
 	{
 		// for each action target position roll against the corresponding character's evasion stat
-		if((result->power_grid[i] != 0) && (evade_success(grid->position[i]->job->evasion) == 0))
+		if((result->power_grid[i] != 0) && (evadeSuccess(grid->position[i]->job->evasion) == 0))
 		{
 			// if the character fails to evade, update their health
-			update_health(grid->position[i], result->power_grid[i]);
+			updateHealth(grid->position[i], result->power_grid[i]);
 			printf("Character '%s' took %i damage\n", grid->position[i]->name, result->power_grid[i]);
 		} else
 		{
@@ -223,7 +223,7 @@ int perform_action(grid_t* grid, int position, int action_index, int move_positi
 	// swap the two move cells if applicable
 	if(result->move_cells[0] != NO_MOVE)
 	{
-		swap_characters(grid, result->move_cells[0], result->move_cells[1]);
+		swapCharacters(grid, result->move_cells[0], result->move_cells[1]);
 	}
 
 	free(result);
@@ -232,7 +232,7 @@ int perform_action(grid_t* grid, int position, int action_index, int move_positi
 }
 
 // returns LEFT_TEAM if index corresponds to the left team, RIGHT_TEAM if index corresponds to the right team, ERROR on error
-int get_team(int position)
+int getTeam(int position)
 {
 	if(position < 0 || position > 7)
 	{
@@ -249,7 +249,7 @@ int get_team(int position)
 }
 
 // uses characters by their speed stat to determine in what order they perform actions, returns an array of integer indexes (corresponding to the characters' indexes on the grid) in the order the characters will perform their actions, returns NULL on error
-int* get_character_turn_order(grid_t* grid)
+int* getCharacterTurnOrder(grid_t* grid)
 {
 	if(grid == NULL)
 	{
@@ -294,7 +294,7 @@ int* get_character_turn_order(grid_t* grid)
 }
 
 // prints character turn order returned by get_character_turn_order(), returns SUCCESS on success, ERROR on error
-int print_character_turn_order(grid_t* grid)
+int printCharacterTurnOrder(grid_t* grid)
 {
 	if(grid == NULL)
 	{
@@ -302,7 +302,7 @@ int print_character_turn_order(grid_t* grid)
 		return ERROR;
 	}
 
-	int* character_turn_order = get_character_turn_order(grid);
+	int* character_turn_order = getCharacterTurnOrder(grid);
 
 	printf("Character turn order:\n");
 	for(int i = 0; i < NUM_POSITIONS; i++)
@@ -314,7 +314,7 @@ int print_character_turn_order(grid_t* grid)
 }
 
 // determines the winner based on the current grid, returns NO_WINNER for no winner, LEFT_TEAM for left team, RIGHT_TEAM for right team, ERROR on error
-int determine_winner(grid_t* grid)
+int determineWinner(grid_t* grid)
 {
 	if(grid == NULL)
 	{
@@ -326,9 +326,9 @@ int determine_winner(grid_t* grid)
 
 	for(int i = 0; i < NUM_POSITIONS; i++)
 	{
-		if(is_alive(grid->position[i]) == FALSE)
+		if(isAlive(grid->position[i]) == FALSE)
 		{
-			if(get_team(i) == LEFT_TEAM)
+			if(getTeam(i) == LEFT_TEAM)
 			{
 				left_deaths++;
 			} else
@@ -350,7 +350,7 @@ int determine_winner(grid_t* grid)
 }
 
 // swaps 2 characters' positions on the grid
-int swap_characters(grid_t* grid, int position0, int position1)
+int swapCharacters(grid_t* grid, int position0, int position1)
 {
 	if(grid == NULL)
 	{
@@ -364,18 +364,18 @@ int swap_characters(grid_t* grid, int position0, int position1)
 	}
 
 	// new character struct that will inherit properties from the character at position 0 and replace the character at position 1
-	character_t* new_char0 = initialize_character(grid->position[position0]->name, position1, grid->position[position0]->job->name);
+	character_t* new_char0 = initializeCharacter(grid->position[position0]->name, position1, grid->position[position0]->job->name);
 
 	// new character struct that will inherit properties from the character at position 1 and replace the character at position 0
-	character_t* new_char1 = initialize_character(grid->position[position1]->name, position0, grid->position[position1]->job->name);
+	character_t* new_char1 = initializeCharacter(grid->position[position1]->name, position0, grid->position[position1]->job->name);
 
 	// swap over old health values
 	new_char0->job->health = grid->position[position0]->job->health;
 	new_char1->job->health = grid->position[position1]->job->health;
 
 	// free old characters
-	free_character(grid->position[position0]);
-	free_character(grid->position[position1]);
+	freeCharacter(grid->position[position0]);
+	freeCharacter(grid->position[position1]);
 
 	// insert new characters in appropriate positions
 	grid->position[position0] = new_char1;
@@ -385,7 +385,7 @@ int swap_characters(grid_t* grid, int position0, int position1)
 }
 
 // prints grid state (player name, job, health for each cell), returns SUCCESS on success, ERROR on error
-int print_grid(grid_t* grid)
+int printGrid(grid_t* grid)
 {
 	if(grid == NULL)
 	{
@@ -436,7 +436,7 @@ int print_grid(grid_t* grid)
 }
 
 // prints info about each character in the grid, returns SUCCESS on success, ERROR on error
-int print_grid_info(grid_t* grid)
+int printGridInfo(grid_t* grid)
 {
 	if(grid == NULL)
 	{
@@ -449,7 +449,7 @@ int print_grid_info(grid_t* grid)
 		if(grid->position[i] != NULL)
 		{
 			printf("-----Character Info Position %i-----\n", i);
-			print_character_info(grid->position[i], i);
+			printCharacterInfo(grid->position[i], i);
 		}
 	}
 	printf("\n");
@@ -458,7 +458,7 @@ int print_grid_info(grid_t* grid)
 }
 
 // bookkeeping function
-void free_grid(grid_t* grid)
+void freeGrid(grid_t* grid)
 {
 	if(grid == NULL)
 	{
@@ -470,7 +470,7 @@ void free_grid(grid_t* grid)
 	{
 		if(grid->position[i] != NULL)
 		{
-			free_character(grid->position[i]);
+			freeCharacter(grid->position[i]);
 		}
 	}
 

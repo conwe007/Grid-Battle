@@ -1,7 +1,7 @@
 #include "character.h"
 
 // initializes a character witch custom name, position, and job
-character_t* initialize_character(char* name, int position, char* job)
+character_t* initializeCharacter(char* name, int position, char* job)
 {
 	character_t* character = (character_t*)malloc(sizeof(character_t));
 
@@ -12,13 +12,13 @@ character_t* initialize_character(char* name, int position, char* job)
 
 	if(!strcmp(job, "Lancer"))
 	{
-		character->job = initialize_job_lancer();
+		character->job = initializeJobLancer();
 	} else if(!strcmp(job, "Zealot"))
 	{
-		character->job = initialize_job_zealot();
+		character->job = initializeJobZealot();
 	} else if(!strcmp(job, "Jester"))
 	{
-		character->job = initialize_job_jester();
+		character->job = initializeJobJester();
 	} else
 	{
 		character->job = NULL;
@@ -29,7 +29,7 @@ character_t* initialize_character(char* name, int position, char* job)
 }
 
 // update character's health based on action with power being applied to it, returns SUCCESS normally, FAILURE if updated health <= 0
-int update_health(character_t* character, int power)
+int updateHealth(character_t* character, int power)
 {
 	character->job->health = character->job->health - power;
 
@@ -42,7 +42,7 @@ int update_health(character_t* character, int power)
 }
 
 // returns TRUE if character has > 0 health, false otherwise
-int is_alive(character_t* character)
+int isAlive(character_t* character)
 {
 	if(character->job->health > 0)
 	{
@@ -53,7 +53,7 @@ int is_alive(character_t* character)
 }
 
 // returns an array with the index of each available action based on the character's current position
-int* get_available_actions(character_t* character)
+int* getAvailableActions(character_t* character)
 {
 	// maximum size needed is 6 actions plus terminating -1
 	int* action_index_array = (int*)malloc(sizeof(int) * (NUM_ACTIONS + 1));
@@ -62,7 +62,7 @@ int* get_available_actions(character_t* character)
 	for(int i = 0; i < NUM_ACTIONS; i++)
 	{
 		// check if the character's position is valid for its action at action_index i
-		if(current_position_is_valid(character->job->action[i], character->position))
+		if(currentPositionIsValid(character->job->action[i], character->position))
 		{
 			action_index_array[index] = i;
 			index++;
@@ -76,7 +76,7 @@ int* get_available_actions(character_t* character)
 }
 
 // debugging function, prints action indexes of actions available to character at its current location, returns SUCCESS on success, ERROR on error
-int print_available_actions(character_t* character)
+int printAvailableActions(character_t* character)
 {
 	if(character == NULL)
 	{
@@ -84,7 +84,7 @@ int print_available_actions(character_t* character)
 		return ERROR;
 	}
 
-	int* action_index_array = get_available_actions(character);
+	int* action_index_array = getAvailableActions(character);
 	int index = 0;
 
 	printf("Available actions for Character '%s': ", character->name);
@@ -99,7 +99,7 @@ int print_available_actions(character_t* character)
 }
 
 // prints character name, job, health, skill, evasion, speed, moveset, returns SUCCESS on success, ERROR on error
-int print_character_info(character_t* character, int position)
+int printCharacterInfo(character_t* character, int position)
 {
 	if(character == NULL)
 	{
@@ -115,13 +115,13 @@ int print_character_info(character_t* character, int position)
 	printf("\t%-*s%i\n", INFO_SIZE_STAT, STRING_SPEED, character->job->speed);
 
 	printf("Valid actions:\n");
-	print_job_moveset(character->job, position);
+	printJobMoveset(character->job, position);
 
 	return SUCCESS;
 }
 
 //bookkeeping function
-void free_character(character_t* character)
+void freeCharacter(character_t* character)
 {
 	if(character == NULL)
 	{
@@ -131,7 +131,7 @@ void free_character(character_t* character)
 
 	free(character->name);
 
-	free_job(character->job);
+	freeJob(character->job);
 
 	free(character);
 }
